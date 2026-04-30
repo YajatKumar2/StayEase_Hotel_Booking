@@ -4,8 +4,9 @@ const {
   getPricingByRoom,
   upsertPricing
 } = require('../controllers/pricingController');
+const { verifyAdmin } = require('../middleware/authMiddleware');
 
 router.get('/:roomId', getPricingByRoom);
-router.post('/:roomId', upsertPricing);
+router.post('/:roomId', verifyAdmin, upsertPricing);
 
 module.exports = router;

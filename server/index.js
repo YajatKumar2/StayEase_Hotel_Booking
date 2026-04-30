@@ -10,8 +10,10 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.get('/test', (req, res) => res.json({ message: 'Server is working' }));
 
 // Routes
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/reservations', require('./routes/reservationRoutes'));
 app.use('/api/pricing', require('./routes/pricingRoutes'));

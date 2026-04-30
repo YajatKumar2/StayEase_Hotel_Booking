@@ -8,9 +8,10 @@ const {
   modifyReservation,
   cancelReservation
 } = require('../controllers/reservationController');
+const { verifyAdmin } = require('../middleware/authMiddleware');
 
 router.get('/availability', checkAvailability);
-router.get('/', getAllReservations);
+router.get('/', verifyAdmin, getAllReservations);
 router.get('/guest/:email', getReservationsByEmail);
 router.post('/', createReservation);
 router.put('/:id', modifyReservation);

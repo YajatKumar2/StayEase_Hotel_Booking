@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api' });
+const API = axios.create({ baseURL: 'http://localhost:8000/api' });
+
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem('adminToken');
+  if (token) req.headers.Authorization = `Bearer ${token}`;
+  return req;
+});
 
 // Rooms
 export const getAllRooms = () => API.get('/rooms');
