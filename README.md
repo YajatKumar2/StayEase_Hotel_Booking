@@ -1,4 +1,4 @@
-```markdown
+
 # 🏨 StayEase - Hotel Booking System
 
 A full-stack hotel reservation platform built with the MERN stack and JSP.
@@ -149,4 +149,3 @@ Automatic emails are sent to guests on:
 - **Project:** Hotel Booking System
 - **Difficulty:** Intermediate
 - **Stack:** MERN + JSP
-```
