@@ -171,6 +171,7 @@ function AdminPanel() {
                   <th>Check-out</th>
                   <th>Total</th>
                   <th>Status</th>
+                  <th>Voucher</th>
                 </tr>
               </thead>
               <tbody>
@@ -187,6 +188,28 @@ function AdminPanel() {
                       <span className="status-badge" style={{ background: statusColor(r.status) }}>
                         {r.status}
                       </span>
+                    </td>
+                    <td>
+                      <button
+                        className="voucher-btn"
+                        onClick={() => {
+                          const params = new URLSearchParams({
+                            bookingRef: r.bookingRef,
+                            guestName: r.guestName,
+                            guestEmail: r.guestEmail,
+                            roomName: r.room?.name || 'N/A',
+                            roomType: r.room?.type || 'N/A',
+                            checkIn: new Date(r.checkIn).toDateString(),
+                            checkOut: new Date(r.checkOut).toDateString(),
+                            guests: r.guests,
+                            totalPrice: r.totalPrice,
+                            status: r.status
+                          });
+                          window.open(`http://localhost:8080/stayease/voucher.jsp?${params.toString()}`, '_blank');
+                        }}
+                      >
+                        🖨️ Voucher
+                      </button>
                     </td>
                   </tr>
                 ))}

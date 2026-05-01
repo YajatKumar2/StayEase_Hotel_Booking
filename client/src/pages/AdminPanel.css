@@ -191,3 +191,21 @@
 .delete-btn:hover { background: #e74c3c; color: white; }
 
 .loading { text-align: center; padding: 80px; font-size: 1.2rem; color: #666; }
+
+.voucher-btn {
+  padding: 6px 14px;
+  background: #f0fff4;
+  color: #27ae60;
+  border: 1.5px solid #27ae60;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.voucher-btn:hover {
+  background: #27ae60;
+  color: white;
+}
