@@ -1,7 +1,7 @@
 const Reservation = require('../models/Reservation');
 const Room = require('../models/Room');
 const Pricing = require('../models/Pricing');
-const { sendConfirmationEmail, sendCancellationEmail } = require('../utils/mailer');
+const { sendConfirmationEmail, sendCancellationEmail, sendModificationEmail } = require('../utils/mailer');
 const { v4: uuidv4 } = require('uuid');
 
 // Check availability
@@ -118,6 +118,7 @@ exports.modifyReservation = async (req, res) => {
     reservation.checkOut = checkOut;
     reservation.status = 'modified';
     await reservation.save();
+    await sendModificationEmail(reservation);
     res.json(reservation);
   } catch (err) {
     res.status(400).json({ message: err.message });

@@ -52,3 +52,29 @@ exports.sendCancellationEmail = async (reservation) => {
     console.log('Email error:', err.message);
   }
 };
+
+exports.sendModificationEmail = async (reservation) => {
+  try {
+    await transporter.sendMail({
+      from: `StayEase <${process.env.EMAIL_USER}>`,
+      to: reservation.guestEmail,
+      subject: `Booking Modified — Ref: ${reservation.bookingRef}`,
+      html: `
+        <h2>Your booking has been modified! ✏️</h2>
+        <p>Dear ${reservation.guestName},</p>
+        <p>Your reservation at <strong>StayEase</strong> has been successfully updated.</p>
+        <ul>
+          <li><strong>Booking Ref:</strong> ${reservation.bookingRef}</li>
+          <li><strong>New Check-in:</strong> ${new Date(reservation.checkIn).toDateString()}</li>
+          <li><strong>New Check-out:</strong> ${new Date(reservation.checkOut).toDateString()}</li>
+          <li><strong>Guests:</strong> ${reservation.guests}</li>
+          <li><strong>Total Price:</strong> $${reservation.totalPrice}</li>
+        </ul>
+        <p>If you did not request this change please contact us immediately.</p>
+        <p>Thank you for choosing StayEase!</p>
+      `
+    });
+  } catch (err) {
+    console.log('Email error:', err.message);
+  }
+};
