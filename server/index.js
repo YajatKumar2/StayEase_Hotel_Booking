@@ -20,8 +20,14 @@ app.use('/api/pricing', require('./routes/pricingRoutes'));
 
 // Connect to MongoDB and start server
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log('MongoDB connected');
+
+    // Clear reservations on every restart
+    const Reservation = require('./models/Reservation');
+    await Reservation.deleteMany();
+    console.log('Reservations cleared');
+
     app.listen(process.env.PORT, () => {
       console.log(`Server running on port ${process.env.PORT}`);
     });

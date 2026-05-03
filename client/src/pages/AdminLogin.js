@@ -16,7 +16,7 @@ function AdminLogin() {
       setLoading(true);
       setError('');
       const res = await axios.post('http://localhost:8000/api/auth/login', form);
-      localStorage.setItem('adminToken', res.data.token);
+      sessionStorage.setItem('adminToken', res.data.token);
       navigate('/admin');
     } catch (err) {
       setError('Invalid username or password');

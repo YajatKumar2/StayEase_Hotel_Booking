@@ -4,10 +4,10 @@ import './Navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
-  const isAdmin = localStorage.getItem('adminToken');
+  const isAdmin = sessionStorage.getItem('adminToken');
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
+    sessionStorage.removeItem('adminToken');
     navigate('/admin-login');
   };
 
@@ -16,6 +16,7 @@ function Navbar() {
       <Link to="/" className="navbar-brand">🏨 StayEase</Link>
       <div className="navbar-links">
         <Link to="/">Home</Link>
+        <Link to="/calendar">Availability</Link>
         <Link to="/my-reservations">My Reservations</Link>
         {isAdmin ? (
           <>

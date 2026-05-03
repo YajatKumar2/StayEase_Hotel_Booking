@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import './AdminPanel.css';
 import {
   getAllRooms, createRoom, updateRoom, deleteRoom,
-  getAllReservations, upsertPricing, getPricingByRoom
+  getAllReservations, upsertPricing, getPricingByRoom,
+  cancelReservation
 } from '../services/api';
-import './AdminPanel.css';
 
 function AdminPanel() {
   const [tab, setTab] = useState('reservations');
@@ -171,6 +172,7 @@ function AdminPanel() {
                   <th>Check-out</th>
                   <th>Total</th>
                   <th>Status</th>
+                  <th>Actions</th>
                   <th>Voucher</th>
                 </tr>
               </thead>
@@ -189,6 +191,29 @@ function AdminPanel() {
                         {r.status}
                       </span>
                     </td>
+                    
+                    <td>
+                      {r.status !== 'cancelled' && (
+                        <button
+                          className="admin-cancel-btn"
+                          onClick={async () => {
+                            if (!window.confirm('Cancel this reservation?')) return;
+                            try {
+                              await cancelReservation(r._id);
+                              setReservations(reservations.map(res =>
+                                res._id === r._id ? { ...res, status: 'cancelled' } : res
+                              ));
+                              setMessage('Reservation cancelled successfully');
+                            } catch (err) {
+                              setMessage('Failed to cancel reservation');
+                            }
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </td>
+
                     <td>
                       <button
                         className="voucher-btn"

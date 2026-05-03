@@ -5,6 +5,7 @@ const {
   createReservation,
   getAllReservations,
   getReservationsByEmail,
+  getReservationsByRoom,
   modifyReservation,
   cancelReservation
 } = require('../controllers/reservationController');
@@ -13,6 +14,7 @@ const { verifyAdmin } = require('../middleware/authMiddleware');
 router.get('/availability', checkAvailability);
 router.get('/', verifyAdmin, getAllReservations);
 router.get('/guest/:email', getReservationsByEmail);
+router.get('/room/:roomId', getReservationsByRoom);
 router.post('/', createReservation);
 router.put('/:id', modifyReservation);
 router.patch('/:id/cancel', cancelReservation);
