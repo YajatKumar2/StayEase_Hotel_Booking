@@ -12,6 +12,7 @@ function SearchResults() {
   const checkOut = params.get('checkOut');
   const type = params.get('type');
   const guests = params.get('guests');
+  const amenities = params.get('amenities');
 
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ function SearchResults() {
     const fetchRooms = async () => {
       try {
         setLoading(true);
-        const res = await checkAvailability({ checkIn, checkOut, type });
+        const res = await checkAvailability({ checkIn, checkOut, type, amenities });
         const filtered = res.data.filter(room => room.maxGuests >= parseInt(guests));
         setRooms(filtered);
       } catch (err) {
@@ -36,12 +37,8 @@ function SearchResults() {
   const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
 
   const getPrice = (room) => {
-    if (!room.pricing) return 'N/A';
-    const today = new Date();
-    const seasonal = room.pricing.seasonalRates?.find(r =>
-      today >= new Date(r.startDate) && today <= new Date(r.endDate)
-    );
-    return seasonal ? seasonal.price : room.pricing.basePrice;
+    if (!room.pricing) return 0;
+    return room.pricing.basePrice;
   };
 
   if (loading) return <div className="loading">Searching available rooms...</div>;
@@ -78,7 +75,7 @@ function SearchResults() {
                   </div>
                   <button
                     className="book-btn"
-                    onClick={() => navigate(`/book/${room._id}?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${getPrice(room)}&nights=${nights}`)}
+                    onClick={() => navigate(`/book/${room._id}?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&totalPrice=${getPrice(room) * nights}&nights=${nights}&basePrice=${getPrice(room)}`)}
                   >
                     Book Now
                   </button>

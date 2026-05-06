@@ -12,7 +12,8 @@ function BookingPage() {
   const checkIn = params.get('checkIn');
   const checkOut = params.get('checkOut');
   const guests = params.get('guests');
-  const price = params.get('price');
+  const totalPrice = params.get('totalPrice');
+  const basePrice = params.get('basePrice');
   const nights = params.get('nights');
 
   const [room, setRoom] = useState(null);
@@ -53,7 +54,7 @@ function BookingPage() {
         checkIn,
         checkOut,
         guests: parseInt(guests),
-        totalPrice: parseFloat(price) * parseInt(nights)
+        totalPrice: parseFloat(totalPrice)
       });
       setSuccess(res.data);
     } catch (err) {
@@ -144,12 +145,12 @@ function BookingPage() {
             </div>
             <div className="summary-row">
               <span>Price per night</span>
-              <span>${price}</span>
+              <span>${basePrice}</span>
             </div>
             <hr />
             <div className="summary-total">
               <span>Total</span>
-              <span>${parseFloat(price) * parseInt(nights)}</span>
+              <span>${parseFloat(totalPrice)}</span>
             </div>
           </div>
         </div>

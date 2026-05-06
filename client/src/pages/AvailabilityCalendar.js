@@ -103,6 +103,21 @@ function AvailabilityCalendar() {
               <div className="availability-summary">
                 <p>🔴 <strong>{bookedDates.length}</strong> days booked</p>
               </div>
+              {rooms.find(r => r._id === selectedRoom) && (
+                <div className="room-description">
+                  <h4>About this room</h4>
+                  <p>{rooms.find(r => r._id === selectedRoom)?.description}</p>
+                  <div className="desc-details">
+                    <span>👥 Max Guests: {rooms.find(r => r._id === selectedRoom)?.maxGuests}</span>
+                    <span>🏷️ Type: {rooms.find(r => r._id === selectedRoom)?.type}</span>
+                  </div>
+                  <div className="desc-amenities">
+                    {rooms.find(r => r._id === selectedRoom)?.amenities.map(a => (
+                      <span key={a} className="amenity-tag">{a}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>

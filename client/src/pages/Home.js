@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Home.css';
+import { useEffect, useRef } from 'react';
+
+const AMENITIES = ['WiFi', 'AC', 'TV', 'Hot Water', 'Mini Bar', 'Bathtub', 'Balcony', 'Butler Service'];
 
 function Home() {
   const navigate = useNavigate();
@@ -10,11 +13,34 @@ function Home() {
   const [checkOut, setCheckOut] = useState(null);
   const [type, setType] = useState('');
   const [guests, setGuests] = useState(1);
+  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [showAmenities, setShowAmenities] = useState(false);
+
+  const amenityRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (amenityRef.current && !amenityRef.current.contains(e.target)) {
+        setShowAmenities(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleAmenity = (amenity) => {
+    setSelectedAmenities(prev =>
+      prev.includes(amenity)
+        ? prev.filter(a => a !== amenity)
+        : [...prev, amenity]
+    );
+  };
 
   const handleSearch = () => {
     if (!checkIn || !checkOut) return alert('Please select check-in and check-out dates');
     if (checkOut <= checkIn) return alert('Check-out must be after check-in');
-    navigate(`/search?checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}&type=${type}&guests=${guests}`);
+    const amenitiesParam = selectedAmenities.length > 0 ? selectedAmenities.join(',') : '';
+    navigate(`/search?checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}&type=${type}&guests=${guests}&amenities=${amenitiesParam}`);
   };
 
   return (
@@ -63,6 +89,30 @@ function Home() {
                 value={guests}
                 onChange={e => setGuests(e.target.value)}
               />
+            </div>
+            <div className="search-field amenity-field" ref={amenityRef}>
+              <label>Amenities</label>
+              <button
+                className="amenity-toggle"
+                onClick={() => setShowAmenities(!showAmenities)}
+                type="button"
+              >
+                {selectedAmenities.length > 0 ? `${selectedAmenities.length} selected` : 'Any'} ▾
+              </button>
+              {showAmenities && (
+                <div className="amenity-dropdown">
+                  {AMENITIES.map(amenity => (
+                    <label key={amenity} className="amenity-option">
+                      <input
+                        type="checkbox"
+                        checked={selectedAmenities.includes(amenity)}
+                        onChange={() => toggleAmenity(amenity)}
+                      />
+                      {amenity}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
             <button className="search-btn" onClick={handleSearch}>Search Rooms</button>
           </div>
