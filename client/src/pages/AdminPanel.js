@@ -155,6 +155,15 @@ function AdminPanel() {
         <button className={tab === 'pricing' ? 'active' : ''} onClick={() => setTab('pricing')}>
           Pricing
         </button>
+        <button
+          className="report-btn"
+          onClick={() => {
+            const token = sessionStorage.getItem('adminToken');
+            window.open(`http://localhost:8080/stayease/report.jsp?token=${token}`, '_blank');
+          }}
+        >
+          📊 Daily Report
+        </button>
       </div>
 
       {tab === 'reservations' && (

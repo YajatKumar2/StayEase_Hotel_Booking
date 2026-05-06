@@ -149,3 +149,43 @@ exports.getReservationsByRoom = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Get daily report
+exports.getDailyReport = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    const allActiveReservations = await Reservation.find({
+      status: { $ne: 'cancelled' }
+    }).populate('room');
+
+    const checkInsToday = allActiveReservations.filter(r =>
+      new Date(r.checkIn) >= startOfDay && new Date(r.checkIn) <= endOfDay
+    );
+
+    const checkOutsToday = allActiveReservations.filter(r =>
+      new Date(r.checkOut) >= startOfDay && new Date(r.checkOut) <= endOfDay
+    );
+
+    const currentlyOccupied = allActiveReservations.filter(r =>
+      new Date(r.checkIn) <= endOfDay && new Date(r.checkOut) >= startOfDay
+    );
+
+    const totalRevenue = checkInsToday.reduce((sum, r) => sum + r.totalPrice, 0);
+
+    res.json({
+      date: new Date().toDateString(),
+      totalCheckIns: checkInsToday.length,
+      totalCheckOuts: checkOutsToday.length,
+      totalOccupied: currentlyOccupied.length,
+      totalRevenue,
+      checkIns: checkInsToday,
+      checkOuts: checkOutsToday,
+      occupied: currentlyOccupied
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

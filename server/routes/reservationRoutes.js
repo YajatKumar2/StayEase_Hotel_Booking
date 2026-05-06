@@ -7,7 +7,8 @@ const {
   getReservationsByEmail,
   getReservationsByRoom,
   modifyReservation,
-  cancelReservation
+  cancelReservation,
+  getDailyReport
 } = require('../controllers/reservationController');
 const { verifyAdmin } = require('../middleware/authMiddleware');
 
@@ -18,5 +19,6 @@ router.get('/room/:roomId', getReservationsByRoom);
 router.post('/', createReservation);
 router.put('/:id', modifyReservation);
 router.patch('/:id/cancel', cancelReservation);
+router.get('/report/daily', verifyAdmin, getDailyReport);
 
 module.exports = router;
