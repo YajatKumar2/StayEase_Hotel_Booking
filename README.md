@@ -84,8 +84,8 @@ MONGO_URI=mongodb://localhost:27017/stayease
 PORT=8000
 EMAIL_USER=your_gmail@gmail.com
 EMAIL_PASS=your_app_password
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=stayease123
+ADMIN_USERNAME=username_of_your_choice
+ADMIN_PASSWORD=password_of_your choice
 JWT_SECRET=stayease_jwt_secret_key
 ```
 
